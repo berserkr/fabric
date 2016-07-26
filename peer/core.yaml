@@ -60,12 +60,14 @@ logging:
     #
     # 4. Otherwise, the specifications below apply.
     #
-    # Developers: Please see fabric/docs/dev-setup/logging-control.md for more
+    # Developers: Please see fabric/docs/Setup/logging-control.md for more
     # options.
+    peer: warning
 
     node:      info
     network:   warning
     chaincode: warning
+    version: warning
 
 ###############################################################################
 #
@@ -244,7 +246,8 @@ vm:
         # If you have your own ipam & dns-server for cluster you can use them to create container efficient.
         # NetworkMode Sets the networking mode for the container. Supported standard values are: `host`(default),`bridge`,`ipvlan`,`none`
         # dns A list of DNS servers for the container to use.
-        # note: not support customize for `Privileged`
+        # note: not support customize for `Privileged` `Binds` `Links` `PortBindings`
+        # not support set LogConfig using Environment Variables
         # LogConfig sets the logging driver (Type) and related options (Config) for Docker
         # you can refer https://docs.docker.com/engine/admin/logging/overview/ for more detail configruation.
         hostConfig:
@@ -256,6 +259,7 @@ vm:
                 Config:
                     max-size: "50m"
                     max-file: "5"
+            Memory: 2147483648
 ###############################################################################
 #
 #    Chaincode section
@@ -413,7 +417,7 @@ security:
     multithreading:
       enabled: false
 
-    # Confidentiality protocol version could be 1.1 or 1.2
+    # Confidentiality protocol versions supported: 1.2
     confidentialityProtocolVersion: 1.2
 
 ################################################################################
