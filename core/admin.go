@@ -18,18 +18,19 @@ package core
 
 import (
 	"os"
-	"runtime"
 
-	"github.com/op/go-logging"
-	"github.com/spf13/viper"
 	"golang.org/x/net/context"
 
-	"google/protobuf"
-
-	pb "github.com/hyperledger/fabric/protos"
+	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/hyperledger/fabric/common/flogging"
+	"github.com/hyperledger/fabric/core/config"
+	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-var log = logging.MustGetLogger("server")
+var log = flogging.MustGetLogger("server")
+
+// Here for unit testing purposes
+var osExit = os.Exit
 
 // NewAdminServer creates and returns a Admin service instance.
 func NewAdminServer() *ServerAdmin {
@@ -41,41 +42,51 @@ func NewAdminServer() *ServerAdmin {
 type ServerAdmin struct {
 }
 
-func worker(id int, die chan struct{}) {
-	for {
-		select {
-		case <-die:
-			log.Debugf("worker %d terminating", id)
-			return
-		default:
-			log.Debugf("%d is working...", id)
-			runtime.Gosched()
-		}
-	}
-}
-
 // GetStatus reports the status of the server
-func (*ServerAdmin) GetStatus(context.Context, *google_protobuf.Empty) (*pb.ServerStatus, error) {
+func (*ServerAdmin) GetStatus(context.Context, *empty.Empty) (*pb.ServerStatus, error) {
 	status := &pb.ServerStatus{Status: pb.ServerStatus_STARTED}
 	log.Debugf("returning status: %s", status)
 	return status, nil
 }
 
 // StartServer starts the server
-func (*ServerAdmin) StartServer(context.Context, *google_protobuf.Empty) (*pb.ServerStatus, error) {
+func (*ServerAdmin) StartServer(context.Context, *empty.Empty) (*pb.ServerStatus, error) {
 	status := &pb.ServerStatus{Status: pb.ServerStatus_STARTED}
 	log.Debugf("returning status: %s", status)
 	return status, nil
 }
 
 // StopServer stops the server
-func (*ServerAdmin) StopServer(context.Context, *google_protobuf.Empty) (*pb.ServerStatus, error) {
+func (*ServerAdmin) StopServer(context.Context, *empty.Empty) (*pb.ServerStatus, error) {
 	status := &pb.ServerStatus{Status: pb.ServerStatus_STOPPED}
 	log.Debugf("returning status: %s", status)
 
-	pidFile := viper.GetString("peer.fileSystemPath") + "/peer.pid"
+	pidFile := config.GetPath("peer.fileSystemPath") + "/peer.pid"
 	log.Debugf("Remove pid file  %s", pidFile)
 	os.Remove(pidFile)
-	defer os.Exit(0)
+	defer osExit(1)
 	return status, nil
+}
+
+// GetModuleLogLevel gets the current logging level for the specified module
+// TODO Modify the signature so as to remove the error return - it's always been nil
+func (*ServerAdmin) GetModuleLogLevel(ctx context.Context, request *pb.LogLevelRequest) (*pb.LogLevelResponse, error) {
+	logLevelString := flogging.GetModuleLevel(request.LogModule)
+	logResponse := &pb.LogLevelResponse{LogModule: request.LogModule, LogLevel: logLevelString}
+	return logResponse, nil
+}
+
+// SetModuleLogLevel sets the logging level for the specified module
+func (*ServerAdmin) SetModuleLogLevel(ctx context.Context, request *pb.LogLevelRequest) (*pb.LogLevelResponse, error) {
+	logLevelString, err := flogging.SetModuleLevel(request.LogModule, request.LogLevel)
+	logResponse := &pb.LogLevelResponse{LogModule: request.LogModule, LogLevel: logLevelString}
+	return logResponse, err
+}
+
+// RevertLogLevels reverts the log levels for all modules to the level
+// defined at the end of peer startup.
+func (*ServerAdmin) RevertLogLevels(context.Context, *empty.Empty) (*empty.Empty, error) {
+	err := flogging.RevertToPeerStartupLevels()
+
+	return &empty.Empty{}, err
 }

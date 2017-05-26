@@ -20,13 +20,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hyperledger/fabric/core/config"
+	"github.com/hyperledger/fabric/common/util"
 	"github.com/hyperledger/fabric/core/container"
-	pb "github.com/hyperledger/fabric/protos"
+	"github.com/hyperledger/fabric/core/testutil"
+	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 func TestMain(m *testing.M) {
-	config.SetupTestConfig("../../../../../peer")
+	testutil.SetupTestConfig()
 	os.Exit(m.Run())
 }
 
@@ -39,10 +40,10 @@ func TestJava_BuildImage(t *testing.T) {
 		return
 	}
 
-	chaincodePath := "../../../shim/java"
+	chaincodePath := "../../../../../examples/chaincode/java/SimpleSample"
 	//TODO find a better way to launch example java chaincode
-	spec := &pb.ChaincodeSpec{Type: pb.ChaincodeSpec_JAVA, ChaincodeID: &pb.ChaincodeID{Path: chaincodePath}, CtorMsg: &pb.ChaincodeInput{Function: "f"}}
-	if _, err := vm.BuildChaincodeContainer(spec); err != nil {
+	spec := &pb.ChaincodeSpec{Type: pb.ChaincodeSpec_JAVA, ChaincodeId: &pb.ChaincodeID{Name: "ssample", Path: chaincodePath}, Input: &pb.ChaincodeInput{Args: util.ToChaincodeArgs("f")}}
+	if err := vm.BuildChaincodeContainer(spec); err != nil {
 		t.Fail()
 		t.Log(err)
 	}

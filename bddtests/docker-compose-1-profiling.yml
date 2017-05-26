@@ -1,3 +1,8 @@
+# Copyright IBM Corp. 2017 All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 vp0:
   extends:
     file: compose-defaults.yml
@@ -5,6 +10,5 @@ vp0:
   environment:
     - CORE_PEER_ID=vp0
     - CORE_PEER_PROFILE_ENABLED=true
-  ports:  
-    - 5000:6060
-
+  ports:
+    - 7050:6060

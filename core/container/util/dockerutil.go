@@ -17,7 +17,12 @@ limitations under the License.
 package util
 
 import (
-	"github.com/fsouza/go-dockerclient"
+	"runtime"
+	"strings"
+
+	docker "github.com/fsouza/go-dockerclient"
+	"github.com/hyperledger/fabric/common/metadata"
+	"github.com/hyperledger/fabric/core/config"
 	"github.com/spf13/viper"
 )
 
@@ -26,12 +31,42 @@ func NewDockerClient() (client *docker.Client, err error) {
 	endpoint := viper.GetString("vm.endpoint")
 	tlsenabled := viper.GetBool("vm.docker.tls.enabled")
 	if tlsenabled {
-		cert := viper.GetString("vm.docker.tls.cert.file")
-		key := viper.GetString("vm.docker.tls.key.file")
-		ca := viper.GetString("vm.docker.tls.ca.file")
+		cert := config.GetPath("vm.docker.tls.cert.file")
+		key := config.GetPath("vm.docker.tls.key.file")
+		ca := config.GetPath("vm.docker.tls.ca.file")
 		client, err = docker.NewTLSClient(endpoint, cert, key, ca)
 	} else {
 		client, err = docker.NewClient(endpoint)
 	}
 	return
+}
+
+// Our docker images retrieve $ARCH via "uname -m", which is typically "x86_64" for, well, x86_64.
+// However, GOARCH uses "amd64".  We therefore need to normalize any discrepancies between "uname -m"
+// and GOARCH here.
+var archRemap = map[string]string{
+	"amd64": "x86_64",
+}
+
+func getArch() string {
+	if remap, ok := archRemap[runtime.GOARCH]; ok {
+		return remap
+	} else {
+		return runtime.GOARCH
+	}
+}
+
+func ParseDockerfileTemplate(template string) string {
+	r := strings.NewReplacer(
+		"$(ARCH)", getArch(),
+		"$(PROJECT_VERSION)", metadata.Version,
+		"$(BASE_VERSION)", metadata.BaseVersion,
+		"$(DOCKER_NS)", metadata.DockerNamespace,
+		"$(BASE_DOCKER_NS)", metadata.BaseDockerNamespace)
+
+	return r.Replace(template)
+}
+
+func GetDockerfileFromConfig(path string) string {
+	return ParseDockerfileTemplate(viper.GetString(path))
 }

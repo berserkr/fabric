@@ -1,47 +1,52 @@
-***NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE*** 
 
-This repository is a ***static archive*** of the Hyperledger Fabric project. It is no longer being actively developed. We have transitioned active development for all Hyperledger projects to [Gerrit](https://gerrit.hyperledger.org/r/#/admin/projects/fabric) and [Jira](https://jira.hyperledger.org/projects/FAB/issues/). Note that you will need a [Linux Foundation ID](https://identity.linuxfoundation.org/) to contribute code or issues. 
+**Note:** This is a **read-only mirror** of the formal [Gerrit](https://gerrit.hyperledger.org/r/#/admin/projects/fabric) repository,
+where active development is ongoing. Issue tracking is handled in [Jira](https://jira.hyperledger.org/secure/RapidBoard.jspa?projectKey=FAB&rapidView=5&view=planning)
 
-***NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE*** 
+## Status
 
-[![Build Status](https://travis-ci.org/hyperledger/fabric.svg?branch=master)](https://travis-ci.org/hyperledger/fabric)
+This project is an _Active_ Hyperledger project. For more information on the history of this project see the [Fabric wiki page](https://wiki.hyperledger.org/projects/fabric.md#history). Information on what _Active_ entails can be found in
+the [Hyperledger Project Lifecycle document](https://wiki.hyperledger.org/community/project-lifecycle).
+
+[![Build Status](https://jenkins.hyperledger.org/buildStatus/icon?job=fabric-merge-x86_64)](https://jenkins.hyperledger.org/view/fabric/job/fabric-merge-x86_64/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/955/badge)](https://bestpractices.coreinfrastructure.org/projects/955)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hyperledger/fabric)](https://goreportcard.com/report/github.com/hyperledger/fabric)
 [![GoDoc](https://godoc.org/github.com/hyperledger/fabric?status.svg)](https://godoc.org/github.com/hyperledger/fabric)
 [![Documentation Status](https://readthedocs.org/projects/hyperledger-fabric/badge/?version=latest)](http://hyperledger-fabric.readthedocs.io/en/latest/?badge=latest)
 
-# Incubation Notice
-This project is a Hyperledger project in _Incubation_. It was proposed to the community and documented [here](https://goo.gl/RYQZ5N). Information on what _Incubation_ entails can be found in the [Hyperledger Project Lifecycle document](https://goo.gl/4edNRc).
+## Hyperledger fabric
 
-# Hyperledger Fabric
-The fabric is an implementation of blockchain technology, leveraging familiar and proven technologies. It is a modular architecture allowing pluggable implementations of various function. It features powerful container technology to host any mainstream language for smart contracts development.
+The fabric is an implementation of blockchain technology, leveraging familiar
+and proven technologies. It is a modular architecture allowing pluggable
+implementations of various function. It features powerful container technology
+to host any mainstream language for smart contracts development.
 
-## Releases
-The fabric releases are documented [here](https://github.com/hyperledger/fabric/wiki/Fabric-Releases). We have just released our first release under the governance of the Hyperledger Project - v0.5-developer-preview.
+## Documentation, Getting Started and Developer Guides
 
-## Contributing to the project
-We welcome contributions to the Hyperledger Project in many forms. There's always plenty to do! Full details of how to contribute to this project are documented in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+This is a **read-only mirror** of the formal Gerrit repository, please visit our
+[online documentation](http://hyperledger-fabric.readthedocs.io/en/latest/) for
+information on getting started using and developing with the fabric, SDK and chaincode.
 
-## Maintainers
-The project's [maintainers](MAINTAINERS.txt): are responsible for reviewing and merging all pull requests and they guide the over-all technical direction of the project within the guidelines established by the Hyperledger Project's Technical Steering Committee (TSC).
+## Contributing
 
-## Communication <a name="communication"></a>
-We use [Hyperledger Slack](https://slack.hyperledger.org/) for communication and Google Hangouts&trade; for screen sharing between developers.
+We welcome contributions to the Hyperledger Project in many forms. There’s always plenty to do!
+Check [the documentation on how to contribute to this project](http://hyperledger-fabric.readthedocs.io/en/latest/CONTRIBUTING.html) for the full details.
 
-## Installing the fabric
-[Installation](docs/Setup/Network-setup.md): Describes how to install the blockchain fabric and use project tools.
+## Community
 
-## Documentation
-Project documentation can be found [here](http://hyperledger-fabric.readthedocs.io/en/latest/).
+[Hyperledger Community](https://www.hyperledger.org/community)
 
-## Still Have Questions?
-For general purpose questions, please use [StackOverflow](http://stackoverflow.com/questions/tagged/hyperledger).
+[Hyperledger mailing lists and archives](http://lists.hyperledger.org/)
+
+[Hyperledger Chat](http://chat.hyperledger.org/channel/fabric)
+
+[Hyperledger Fabric Issue Tracking](https://jira.hyperledger.org/secure/Dashboard.jspa?selectPageId=10104)
+
+[Hyperledger Wiki](https://wiki.hyperledger.org/)
+
+[Hyperledger Code of Conduct](https://wiki.hyperledger.org/community/hyperledger-project-code-of-conduct)
+
+[Community Calendar](https://wiki.hyperledger.org/community/calendar-public-meetings)
 
 ## License <a name="license"></a>
-The Hyperledger Project uses the [Apache License Version 2.0](LICENSE) software license.
-
-## Related information
-If you are new to the project, you can begin by reviewing the following documents:
-
-  - [Whitepaper WG](https://github.com/hyperledger/hyperledger/wiki/Whitepaper-WG)
-  - [Requirements WG](https://github.com/hyperledger/hyperledger/wiki/Requirements-WG)
-  - [Protocol Specification](docs/protocol-spec.md)
+The Hyperledger Project uses the [Apache License Version 2.0](LICENSE) software
+license.
