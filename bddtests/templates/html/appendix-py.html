@@ -1,3 +1,10 @@
+<!--
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+-->
 <div>
     {% set msgClassModule = directory.__class__.__module__ %}
     {% set msgClassName = directory.__class__.__name__ %}
@@ -23,7 +30,7 @@ composition.rebuildContainerData()
 context.compose_containers=composition.containerDataList
 
 user = directory.getUser("configAdminOrdererOrg0")
-channel_id = user.tags['OrdererSystemChainId']
+channel_id = user.tags['ordererSystemChannelId']
 deliverer_stream_helper = user.connectToDeliverFunction(context, 'orderer0', user.tags['config-admin-cert'])
 latest_orderer_config_block = bootstrap_util.get_latest_configuration_block(deliverer_stream_helper, channel_id)
 latest_orderer_config_group = bootstrap_util.get_channel_group_from_config_block(latest_orderer_config_block)
@@ -33,7 +40,9 @@ blocks = deliverer_stream_helper.getBlocks()
 assert len(blocks) == 1, "Expected single block, received: {0} blocks".format(len(blocks))
 newest_block = blocks[0]
 last_config = common_dot_common_pb2.LastConfig()
-last_config.ParseFromString(newest_block.metadata.metadata[common_dot_common_pb2.BlockMetadataIndex.Value('LAST_CONFIG')])
+metadata = common_dot_common_pb2.Metadata()
+metadata.ParseFromString(newest_block.metadata.metadata[common_dot_common_pb2.BlockMetadataIndex.Value('LAST_CONFIG')])
+last_config.ParseFromString(metadata.value)
 print("Latest config index = {0}, with latest block index = {1}".format(last_config.index, newest_block.header.number))
 
 #NOTE When done, close open streams
